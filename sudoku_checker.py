@@ -16,6 +16,7 @@ class Sudoku:
   def __init__(self):
 
     self.full_board = []
+    self.mixed_board = []
 
   def fill_small_square(self):
     self.small_square = []
@@ -35,10 +36,29 @@ class Sudoku:
 
     return self.full_board
 
-  def print_board(self):
-    
-    self.board = self.fill_board()
+  def mix_row(self, list_of_elements, a, b, c):
+    row = list_of_elements[a][0:3] + list_of_elements[b][0:3] + list_of_elements[c][0:3]
+    row2 = list_of_elements[a][3:6] + list_of_elements[b][3:6] + list_of_elements[c][3:6]
+    row3 = list_of_elements[a][6:9] + list_of_elements[b][6:9] + list_of_elements[c][6:9]
 
+    self.mixed_board.append(row)
+    self.mixed_board.append(row2)
+    self.mixed_board.append(row3)
+
+  def fill_mixed_board(self):
+
+    self.mix_row(self.full_board, 0, 1, 2)
+    self.mix_row(self.full_board, 3, 4, 5)
+    self.mix_row(self.full_board, 6, 7, 8)
+
+    return self.mixed_board
+
+
+
+  def print_board(self):
+    self.fill_board()
+    self.board = self.fill_mixed_board()
+    
     for item in range(9):
       if item % 3 == 0 and item != 0:
         print("- - - - - - - - - - - -")
@@ -50,9 +70,8 @@ class Sudoku:
         else:
           print(self.board[item][index] + " ", end="")
 
-  def check_rows(self):
-    
-    for row in self.board:
+  def check_rows(self):   
+    for row in self.mixed_board:
       if len(Counter(row).keys()) != 9:
         print(f"Duplicates in row {row}")
       else:
@@ -84,3 +103,4 @@ object_sudoku = Sudoku()
 print(object_sudoku.print_board())
 print(object_sudoku.check_rows())
 print(object_sudoku.check_columns())
+
